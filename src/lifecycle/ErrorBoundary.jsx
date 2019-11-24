@@ -1,4 +1,5 @@
 import React from 'react';
+import { Switch, Route, NavLink, Redirect } from 'react-router-dom';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -59,20 +60,54 @@ const HocErrorBoundaryDemo = () => {
   const SomethingWentWrongWithErrorBoundary = withErrorBoundary(
     SomethingWentWrong,
   );
-  return   <React.Fragment>
-    <h2>Error Boundary Demo (HOC)</h2>
-    <ErrorBoundary>
-      <SomethingWentWrongWithErrorBoundary />
-    </ErrorBoundary>
-  </React.Fragment>;
+  return (
+    <React.Fragment>
+      <h2>Error Boundary Demo (HOC)</h2>
+      <ErrorBoundary>
+        <SomethingWentWrongWithErrorBoundary />
+      </ErrorBoundary>
+    </React.Fragment>
+  );
 };
 
-const ErrorBoundaryExamples = () => {
+const ErrorBoundaryExamples = ({ match: { url, path } }) => {
+  const activeStyle = {
+    fontWeight: 'bolder',
+  };
   return (
     <React.Fragment>
       <h1>Error Boundary Examples</h1>
-      <ErrorBoundaryDemo />
-      <HocErrorBoundaryDemo />
+      <nav>
+        <ul>
+          <li>
+            <NavLink
+              to={`${url}/ErrorBoundaryDemo`}
+              activeStyle={activeStyle}
+            >
+              ErrorBoundaryDemo
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to={`${url}/HocErrorBoundaryDemo`}
+              activeStyle={activeStyle}
+            >
+              HocErrorBoundaryDemo
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
+      <Switch>
+        <Route
+          path={`${path}/ErrorBoundaryDemo`}
+          component={ErrorBoundaryDemo}
+        />
+        <Route
+          path={`${path}/HocErrorBoundaryDemo`}
+          component={HocErrorBoundaryDemo}
+        />
+        <Redirect to={`${path}/ErrorBoundaryDemo`} />
+      </Switch>
     </React.Fragment>
   );
 };
